@@ -1,0 +1,46 @@
+\documentclass{homework}
+\author{Aiden Taylor \& Julia Fay}
+\class{ME 419: Advanced Control Systems}
+\date{\today}
+\title{Solar Tracker Control Problem}
+\usepackage{titlesec}
+\titleformat{\section}    
+       {\fontsize{14}{17}\bfseries}{\thesection}{1em}{}
+
+\begin{document}  \maketitle
+\section*{Background}
+
+The goal of this lab is to understand the impact of accurately modeling friction within a system and how to tune a PID controller to obtain a desired system output. This will be accomplished by modeling and comparing the behavior of a solar tracking system both with and without bearing friction.
+
+\img<panel>[0.5]{Single Axis Solar Tracking System}{panel.png}
+
+The image above shows a single-axis solar tracking system. The main system components are the solar panel, the bearings, and the motor on the panel's central axis which needs a controller. The tracker follows the sun during the day, but is designed to return to a flat orientation as soon as an energy dip is detected in the panel's power output– whether it be from horizon shading, clouds, or other factors. This allows the panel to accumulate as much ambient light as possible to continue producing the maximum possible amount of power even when the sun is not directly hitting it. Your goal is to model the system provided using concepts from ME322 to obtain a system transfer function, then design a controller that will give the fastest possible response when going from an angled position, to horizontal while also fulfilling the provided expectations for settling time and damping. The controller will be tuned for two cases: including bearing friction, and ignoring bearing friction. 
+
+\section*{System Modeling}
+\section*{Obtaining the System Transfer Function}
+
+\question The main system components include the panel, and the motor. The panel can be modeled as a mass rotating about its centroidal axis with inertia J. Include viscous damping b. The motor is a smaller system that converts an input voltage to rotational motion. The motor circuit should have the motor inductance L and resistance R. The rotational inertia J of the motor should be in parallel with the panel inertia. See Figure \ref{wheel}.
+
+\img<wheel>[0.25]{Full System Model}{model.png}
+
+\question From this system schematic, create a linear graph and normal tree to obtain the elemental and constraint equations. Using these equations, create a symbolic block diagram that models the system starting with the input voltage, and ending with the panel's angular position.
+
+\question Next, calculate the system transfer function in symbolic and numerical form. The system should be modeled as a second order system.
+
+\section*{Designing the Controller with Pole Placement for the Frictionless System}
+
+\question Calculate the A, B, C matrices of the system in phase variable form where the output is the angular position of the panel.  
+
+\question The controller should be designed such that the system stays within 10\% OS and has a settling time of 2 seconds. Calculate the K values using these requirements with viscous damping is set to zero. Calculate the Anew matrix with your K values using the following equation: 
+
+\[ A_{new} = A_{old} - BK \]
+
+\section*{Modeling Frictionless System Behavior}
+\question Enter your A\textsubscript{new}, B, C, and D matrices for the frictionless system into MatLab and use the ss function to create a system with your matrices. Note: Your D matrix will be [0].
+
+\question Use the step function to generate a plot of the system's angular position with respect to time. Note: the desired movement of the system of 90 degrees is accounted for in K\textsubscript{c}.
+
+\question Comment on the system's damping, and if the controller accurately produced the desired results. 
+
+
+\end{document}
