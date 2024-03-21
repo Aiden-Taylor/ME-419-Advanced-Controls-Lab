@@ -75,7 +75,7 @@ The image above shows a single-axis solar tracking system. The main system compo
 \end{itemize}
 \newpage
 \section*{Solution}
-
+\img<lgnt>[0.75]{Linear Graph and Normal Tree}{lgnt.png}
 \begin{align*}
 	& \text{Elementals} &  & \text{Constraints}	\\
 	& V_R = Ri_R         &  & i_R = i_L        \\
@@ -86,13 +86,16 @@ The image above shows a single-axis solar tracking system. The main system compo
 	& \tau_b = b\omega_b         &  & \omega_b = \omega_J        \\
 \end{align*}
 
+\img<bd>[0.75]{Block Diagram}{bd.png}
+\newpage
 \subsection*{Transfer Function}
 
 \[\frac{\theta_J}{\theta_{in}} = \frac{\frac{K_vK_c}{RJ}}{s^2 + \frac{Rb + K_v^2}{RJ}s}\]
 
 \subsection*{A, B, C Matrices}
 
-These are the expected A, B, C Matrices for the frictionless system\\
+These are the expected A, B, C Matrices for the frictionless system
+\[\]
 $A = \begin{bmatrix}
 0 & 1\\
 0 & -(\frac{K_v^2}{RJ})
@@ -114,7 +117,8 @@ x_2\end{bmatrix}$
 
 \subsection*{A\textsubscript{new} and K matrices}
 
-These are the expected $A_{new}$ and K Matrices for the frictionless system:\\
+These are the expected $A_{new}$ and K Matrices for the frictionless system:
+\[\]
 $A_{new} = \begin{bmatrix}
 0 & 1\\
 -11.42 & -54
@@ -124,7 +128,8 @@ $K = \begin{bmatrix}
 11.42 & -121
 \end{bmatrix}$
 \subsection*{A, B, C Matrices}
-These are the expected A, B, C Matrices for the system with friction:\\
+These are the expected A, B, C Matrices for the system with friction:
+\[\]
 $A = \begin{bmatrix}
 0 & 1\\
 0 & -(\frac{Rb + K_v^2}{RJ})
@@ -148,7 +153,8 @@ $
 
 \subsection*{A\textsubscript{new} and K matrices}
 
-These are the expected $A_{new}$ and K Matrices for the system with friction:\\
+These are the expected $A_{new}$ and K Matrices for the system with friction:
+\[\]
 $A_{new} = \begin{bmatrix}
 0 & 1\\
 -11.42 & -4
@@ -160,5 +166,23 @@ x_2
 $K = \begin{bmatrix}
 11.42 & -171
 \end{bmatrix}$
+\newpage
+
+\section*{Rubric}
+
+\begin{center}
+\begin{tabular}{ | l | l | l | l | l |}
+\hline
+Criteria & Full Marks & Partial Credit & Points\\ \hline
+Obtaining the System & (2) System Schematic & Partial Credit is awarded & 8 \\Transfer Function&(2) Linear Graph/Normal Tree &  for a correct process with & \\&(2) Block Diagram &  an incorrect final answer. & \\&(2) Transfer Function &  (0-8 pts) &
+ \\ \hline
+Designing the Controller & (2) A,B,C, and D matrices  & Partial Credit is awarded & 6\\With Pole Placement for & for frictionless system &for a correct process with&\\the Frictionless System & (1) K values & an incorrect final answer & \\ & (1) Anew matrix for & (0-4 pts) & \\ & frictionless system & &\\ \hline
+
+
+Modeling the System & (1) Plot for the frictionless system& Partial Credit is awarded & 8\\Behavior with Friction &  (1) Friction Plot with wrong K & for a correct process with & \\values calculated for the & (2) K values for frictional system & an incorrect final answer. & \\frictionless system. & (2) Anew matrix for frictional system & Missing or incorrect plots & \\&(1) Plot showing the system with & will receive zero credit. & \\&friction applied with corresponding & (0-8 pts)&\\ &K values & & \\&(1) Response to discussion question & &\\
+\hline
+ &  & Total & 20 \\ \hline
+\end{tabular}
+\end{center}
 
 \end{document}
