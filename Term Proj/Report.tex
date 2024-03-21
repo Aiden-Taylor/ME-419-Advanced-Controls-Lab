@@ -4,6 +4,7 @@
 \date{\today}
 \title{Solar Tracker Control Problem}
 \usepackage{titlesec}
+\usepackage{amsmath}
 \titleformat{\section}    
        {\fontsize{14}{17}\bfseries}{\thesection}{1em}{}
 
@@ -12,16 +13,28 @@
 
 The goal of this lab is to understand the impact of accurately modeling friction within a system and how to tune a PID controller to obtain a desired system output. This will be accomplished by modeling and comparing the behavior of a solar tracking system both with and without bearing friction.
 
-\img<panel>[0.5]{Single Axis Solar Tracking System}{panel.png}
+\img<panel>[0.75]{Single Axis Solar Tracking System}{panel.png}
 
 The image above shows a single-axis solar tracking system. The main system components are the solar panel, the bearings, and the motor on the panel's central axis which needs a controller. The tracker follows the sun during the day, but is designed to return to a flat orientation as soon as an energy dip is detected in the panel's power output– whether it be from horizon shading, clouds, or other factors. This allows the panel to accumulate as much ambient light as possible to continue producing the maximum possible amount of power even when the sun is not directly hitting it. Your goal is to model the system provided using concepts from ME322 to obtain a system transfer function, then design a controller that will give the fastest possible response when going from an angled position, to horizontal while also fulfilling the provided expectations for settling time and damping. The controller will be tuned for two cases: including bearing friction, and ignoring bearing friction. 
 
+\newpage
 \section*{System Modeling}
 \section*{Obtaining the System Transfer Function}
 
 \question The main system components include the panel, and the motor. The panel can be modeled as a mass rotating about its centroidal axis with inertia J. Include viscous damping b. The motor is a smaller system that converts an input voltage to rotational motion. The motor circuit should have the motor inductance L and resistance R. The rotational inertia J of the motor should be in parallel with the panel inertia. See Figure \ref{wheel}.
 
 \img<wheel>[0.25]{Full System Model}{model.png}
+
+\subsection*{System Constants}
+\begin{align*}
+	b & = 10         &  & \text{Viscous Damping Coefficient}         \\
+	R & = 1           &  & \text{Winding Resistance}         \\
+	L & = 0.078*10^{-3}           &  & \text{Winding Inductance}      \\
+	J & = 5        &  & \text{Total rotational intertia}         \\
+	K_t & = 5           &  & \text{Motor Torque Constant}         \\
+	K_v & = 5          &  & \text{Motor Voltage Constant}      \\
+	K_c & = 2/(\pi) &  & \text{Conmpensation Constant}	\\
+\end{align*}
 
 \question From this system schematic, create a linear graph and normal tree to obtain the elemental and constraint equations. Using these equations, create a symbolic block diagram that models the system starting with the input voltage, and ending with the panel's angular position.
 
@@ -35,6 +48,7 @@ The image above shows a single-axis solar tracking system. The main system compo
 
 \[ A_{new} = A_{old} - BK \]
 
+\newpage
 \section*{Modeling Frictionless System Behavior}
 \question Enter your A\textsubscript{new}, B, C, and D matrices for the frictionless system into MatLab and use the ss function to create a system with your matrices. Note: Your D matrix will be [0].
 
@@ -42,5 +56,109 @@ The image above shows a single-axis solar tracking system. The main system compo
 
 \question Comment on the system's damping, and if the controller accurately produced the desired results. 
 
+\section*{Modeling the System Behavior with Friction}
+\question Change the damping coefficient to the value provided in the system values section while keeping the K values designed for the frictionless system. Plot and analyze the positional output graph to note if the simulation successfully reached the parameters of staying within 10\% overshoot and having a settling time of 2 seconds when friction is added. What kind of damping does the system exhibit?
+
+\question Recalculate the A, B, and C matrices and redesign the K values such that the new system meets the requirements. 
+
+\question Plot the new system step response. What kind of damping do you see now? 
+
+\question Comment on the importance of correctly modeling friction within a system and the potential issues one may run into if it is unaccounted for. 
+
+\section*{Deliverables}
+
+\begin{itemize}
+  \item System modeling materials, including the system schematic, linear graph, and normal tree. 
+  \item System block diagram and transfer function derivation 
+  \item Plots of the frictionless system response, frictional system with frictionless controller response, and frictional system with new controller response
+  \item Answers to all questions posed in the procedure
+\end{itemize}
+\newpage
+\section*{Solution}
+
+\begin{align*}
+	& \text{Elementals} &  & \text{Constraints}	\\
+	& V_R = Ri_R         &  & i_R = i_L        \\
+	& \frac{1}{L}\int{}V_Ldt         &  & V_L = V_{in} - V_R - V_1        \\
+	& V_i  = K_v\omega_2       &  & \omega_2 = \omega_J        \\
+	& \tau_2 = -K_vi_1         &  & i_1 = i_L        \\
+	& \omega_J = \frac{1}{J}\int{}\tau_Jdt         &  & \tau_J = -\tau_2 - \tau_b        \\
+	& \tau_b = b\omega_b         &  & \omega_b = \omega_J        \\
+\end{align*}
+
+\subsection*{Transfer Function}
+
+\[\frac{\theta_J}{\theta_{in}} = \frac{\frac{K_vK_c}{RJ}}{s^2 + \frac{Rb + K_v^2}{RJ}s}\]
+
+\subsection*{A, B, C Matrices}
+
+These are the expected A, B, C Matrices for the frictionless system\\
+$A = \begin{bmatrix}
+0 & 1\\
+0 & -(\frac{K_v^2}{RJ})
+\end{bmatrix}\begin{bmatrix}
+x_1\\
+x_2
+\end{bmatrix}$
+\[\]
+$B = \begin{bmatrix}
+0\\
+1
+\end{bmatrix}\theta_{in}$
+\[\]
+$C = \begin{bmatrix}
+\frac{K_vK_c}{RJ} & 0
+\end{bmatrix}\begin{bmatrix}
+x_1\\
+x_2\end{bmatrix}$
+
+\subsection*{A\textsubscript{new} and K matrices}
+
+These are the expected $A_{new}$ and K Matrices for the frictionless system:\\
+$A_{new} = \begin{bmatrix}
+0 & 1\\
+-11.42 & -54
+\end{bmatrix}$
+\\
+$K = \begin{bmatrix}
+11.42 & -121
+\end{bmatrix}$
+\subsection*{A, B, C Matrices}
+These are the expected A, B, C Matrices for the system with friction:\\
+$A = \begin{bmatrix}
+0 & 1\\
+0 & -(\frac{Rb + K_v^2}{RJ})
+\end{bmatrix}\begin{bmatrix}
+x_1\\
+x_2
+\end{bmatrix}$
+\\
+$B = \begin{bmatrix}
+0\\
+1
+\end{bmatrix}\theta_{in}$
+\\
+$C = \begin{bmatrix}
+\frac{K_vK_c}{RJ} & 0
+\end{bmatrix}\begin{bmatrix}
+x_1\\
+x_2
+\end{bmatrix}
+$
+
+\subsection*{A\textsubscript{new} and K matrices}
+
+These are the expected $A_{new}$ and K Matrices for the system with friction:\\
+$A_{new} = \begin{bmatrix}
+0 & 1\\
+-11.42 & -4
+\end{bmatrix}\begin{bmatrix}
+x_1\\
+x_2
+\end{bmatrix}$
+\\
+$K = \begin{bmatrix}
+11.42 & -171
+\end{bmatrix}$
 
 \end{document}
